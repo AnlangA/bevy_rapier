@@ -8,7 +8,7 @@ fn main() {
         //.add_plugins(RapierDebugRenderPlugin::default())
         .add_systems(Startup, setup_graphics)
         .add_systems(Startup, setup_physics)
-        .add_systems(Update, (spawn_cube_timer, despawn_cubes))
+        .add_systems(Update, (spawn_cube_timer, despawn_cubes, display_cube_count))
         .run();
 }
 
@@ -25,6 +25,16 @@ fn setup_graphics(mut commands: Commands) {
     commands.spawn((
         Camera3d::default(),
         Transform::from_xyz(-5.5, 5.5, 20.0).looking_at(Vec3::ZERO, Vec3::Y),
+    ));
+
+    commands.spawn((
+        Text::default(),
+        Node {
+            position_type: PositionType::Absolute,
+            bottom: Val::Px(12.0),
+            left: Val::Px(12.0),
+            ..default()
+        },
     ));
 }
 
@@ -87,4 +97,12 @@ fn despawn_cubes(
             commands.entity(entity).despawn();
         }
     }
+}
+
+fn display_cube_count(
+    query: Query<&Transform>,
+    mut text: Single<&mut Text>,
+) {
+    let count = query.iter().filter(|transform| transform.translation.y > -20.0).count();
+    text.0 = "Cube Count: ".to_owned() + &count.to_string();
 }
