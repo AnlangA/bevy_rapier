@@ -18,6 +18,7 @@ fn setup_graphics(mut commands: Commands) {
     commands.spawn((
         PointLight {
             shadows_enabled: true,
+            intensity: 1_000_000_0.0,
             ..default()
         },
         
@@ -72,9 +73,9 @@ fn spawn_cube_timer(
         
         // 生成随机角度和半径
         let angle = rand::random::<f32>() * std::f32::consts::PI * 2.0;
-        let radius = rand::random::<f32>() * 4.0;
+        let radius = rand::random::<f32>() * 10.0;
         
-        let y_velocity = rand::random::<f32>() * 1000.0;
+        let y_velocity = rand::random::<f32>() * 100.0;
 
         // 计算x和z坐标
         let x = radius * angle.cos();
