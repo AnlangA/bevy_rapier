@@ -63,7 +63,7 @@ fn spawn_cube_timer(
 ) {
     if time.elapsed_secs() > *next_spawn {
         // 每200ms生成一次
-        *next_spawn = time.elapsed_secs() + 0.1;
+        *next_spawn = time.elapsed_secs() + 0.01;
         
         // 生成随机颜色
         let r = rand::random::<u8>();
@@ -74,17 +74,20 @@ fn spawn_cube_timer(
         let angle = rand::random::<f32>() * std::f32::consts::PI * 2.0;
         let radius = rand::random::<f32>() * 4.0;
         
+        let y_velocity = rand::random::<f32>() * 1000.0;
+
         // 计算x和z坐标
         let x = radius * angle.cos();
         let z = radius * angle.sin();
         
+
         commands.spawn((
             Mesh3d(meshes.add(Cuboid::new(0.6, 0.6, 0.6))),
             RigidBody::Dynamic,
             Restitution::coefficient(0.6),
             Collider::cuboid(0.3, 0.3, 0.3),
             MeshMaterial3d(materials.add(Color::srgb_u8(r, g, b))),
-            //Velocity::angular(Vec3::new(1.0, 1.0, 1.0)),
+            Velocity::angular(Vec3::new(0.0, y_velocity, 0.0)),
             Transform::from_xyz(x, 20.0, z),
         ));
     }
